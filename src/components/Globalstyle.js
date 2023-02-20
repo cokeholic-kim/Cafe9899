@@ -7,7 +7,7 @@ const Globalstyle = createGlobalStyle`
         padding:0;
         box-sizing:border-box;
     }
-    a{text-decoration:none}
+    a{text-decoration:none; color:inherit;}
     li{list-style:none}
 
 `
