@@ -5,6 +5,10 @@ import styled from 'styled-components';
 
 const Headerstyle = styled.div`
     &{
+        position:absolute;
+        top:0;
+        width:100%;
+        z-index:1;
         display:flex;
         flex-direction:column;
         text-align:center;

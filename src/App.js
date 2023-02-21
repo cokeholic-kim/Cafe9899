@@ -3,13 +3,14 @@ import './App.css';
 import Footer from './components/Footer';
 import Globalstyle from './components/Globalstyle';
 import Header from './components/Header';
+import Mainpage from './main/Main';
 
 function App() {
   return (
     <>
       <Globalstyle/>
       <Header/>
-      <Slider/>
+      <Mainpage/>
       <Footer/>
     </>
   );

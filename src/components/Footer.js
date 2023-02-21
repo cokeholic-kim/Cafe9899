@@ -5,6 +5,8 @@ import styled from 'styled-components';
 
 const Footerstyle = styled.footer`
     &{
+        position:relative;
+        z-index:2;
         background-color:black;
         padding:40px 20px;
         display:flex;
