@@ -6,6 +6,7 @@ const ImgSlider = styled.div`
     &{
         width: 100%;
         overflow: hidden;
+        margin-bottom:-4px;
         ul{
             display: flex;
             transition: transform 0.5s ease;

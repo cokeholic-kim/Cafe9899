@@ -11,7 +11,8 @@ const Footerstyle = styled.footer`
         padding:40px 20px;
         display:flex;
         flex-direction:column;
-        color:#fff  ;
+        color:#fff;
+        height:30vh;
     }
     &>ul{
         display:flex;

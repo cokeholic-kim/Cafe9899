@@ -37,7 +37,7 @@ const Mainbottom = () => {
     return (
             <MainSub>
                 <div>
-                    <img src='../imgs/muffin.jpg'/>
+                    <img src='../imgs/muffin.jpg' alt="muffin"/>
                 </div>
                 <div>
                     <div>

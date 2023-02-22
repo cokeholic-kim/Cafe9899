@@ -31,7 +31,7 @@ const MainTopstyle = styled.div`
                 color:#fff;
                 font-weight:700;
                 font-size:20px;
-                background:white;
+                background:none;
 
             }
         }
@@ -43,7 +43,7 @@ const MainTopstyle = styled.div`
 const Maintop = () => {
     return (
             <MainTopstyle>
-                <img src='../imgs/scone.png'/>
+                <img src='../imgs/scone.png' alt="scone"/>
                 <div>
                     <p>Hand Crafted</p>
                     <h1>Bread and Cookies</h1>

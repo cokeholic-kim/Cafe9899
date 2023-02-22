@@ -3,20 +3,16 @@ import styled from 'styled-components';
 
 const FlowSectionStyle = styled.div`
     &{
-        background-color:#D6F9D8;
+        /* background-color:#D6F9D8; */
         height:50vh;
         position:relative;
+        overflow:hidden;
         .flowback{
-            position: relative;
-            top:-90%;
-            height:170vh;
             div{
-                position:sticky;
-                top:18%;
                 text-align:center;
                 img{
-                    padding:50px;
-                    width:60%;
+                    width:100%;
+                    height:200%;
                 }
             }
         }
@@ -32,17 +28,17 @@ const FlowSectionStyle = styled.div`
     }
 `
 
-const FlowSection = () => {
+const FlowSection = ({imgname,p,header}) => {
     return (
         <FlowSectionStyle>
             <div className='flowback'>
                 <div>
-                    <img src='../imgs/scone.png'/>
+                    <img src={`../imgs/${imgname}`} alt="디저트 이미지"/>
                 </div>
             </div>
             <div>
-                <p>ENJOY</p>
-                <h1>DAIRY FREE</h1>
+                <p>{p}</p>
+                <h1>{header}</h1>
                 <button>MENU</button>
             </div>
         </FlowSectionStyle>
