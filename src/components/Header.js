@@ -60,8 +60,8 @@ const Header = () => {
                 <ul>
                     <li><Link to='/Menu'>MENU</Link></li>
                     <li>ORDER ONLINE</li>
-                    <li>SPECIAL MENU</li>
-                    <li>ABOUT</li>
+                    <li><Link to='/Catering'>CATERING SERVICE</Link></li>
+                    <li><Link to='/About'>ABOUT</Link></li>
                 </ul>
                 <h1>9899</h1>
                 <ul>

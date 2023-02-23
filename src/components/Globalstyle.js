@@ -9,6 +9,16 @@ const Globalstyle = createGlobalStyle`
     }
     a{text-decoration:none; color:inherit;}
     li{list-style:none}
+    /* .banner{
+        text-align:center;
+        height:300px;
+        padding-top:4%;
+        color:#fff;
+        background-color:#96F2E0;
+        p{font-size:30px;font-weight:700;}
+        h1{letter-spacing:10px; font-size:45px;}
+    } */
+
 
 `
 

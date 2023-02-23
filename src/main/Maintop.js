@@ -32,7 +32,6 @@ const MainTopstyle = styled.div`
                 font-weight:700;
                 font-size:20px;
                 background:none;
-
             }
         }
 
