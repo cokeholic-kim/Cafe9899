@@ -4,23 +4,130 @@ import "react-datepicker/dist/react-datepicker.css";
 import {ko} from "date-fns/esm/locale"
 import styled from 'styled-components';
 
-const MyDatePicker = styled(DatePicker)`
-    width:100%;
-    height:3rem;
-    font-size:1.6rem;
-    font-weight:bold;
-    background-color:transparent;
-    color:white;
-    border: 1px solid;
-`
 
 const ReservationBoard = styled.div`
     display:flex;
+    justify-content:space-between;
+    .react-datepicker {
+    font-size: 1.5em;
+    }
+    .react-datepicker__header {
+        background-color:black;
+        padding-top: 0.8em;
+    }
+    .react-datepicker__navigation-icon::before{
+        border-color:#fff;
+    }
+    .react-datepicker__month {
+    margin: 0.4em 1em;
+    }
+    .react-datepicker__day-name,
+    .react-datepicker__day {
+        width: 2.5em;
+        line-height: 2.5em;
+        margin: 0.166em;
+    }
+    .react-datepicker__day-name{
+        color:#fff;
+        font-weight:600;
+    }
+    .react-datepicker__current-month {
+    font-size: 1.2em;
+    color:#fff;
+    }
+    .react-datepicker__navigation {
+    top: 1em;
+    line-height: 1.7em;
+    border: 0.45em solid transparent;
+    }
+    .react-datepicker__navigation--previous {
+    border-right-color: #ccc;
+    left: 1em;
+    border-right-color:#fff;
+    }
+    .react-datepicker__navigation--next {
+    border-left-color: #ccc;
+    right: 1em;
+    border-left-color:#fff;
+    }
+    .react-datepicker__day--selected{
+        background-color:black;
+        color:#fff;
+        &:hover{
+            background-color:gray;
+        }
+    }
+    >div:nth-child(2){
+        width:30%;
+        margin:0 1.5%;
+        padding:30px 0 ;
+        text-align:center;
+        p{
+            font-size:35px;
+            font-weight:600;
+        }
+        ul{
+            margin-top:30px;
+            display:flex;
+            flex-wrap:wrap;
+            
+            li{
+                background-color:black;
+                color:#fff;
+                font-size:24px;
+                font-weight:600;
+                border-radius:10px;
+                line-height:60px;
+                width:45%;
+                margin:2.5%;
+                cursor:pointer;
+            }
+        }
+    }
+    >div:nth-child(3){
+        width:30%;
+        text-align:center;
+        h2{
+            font-size:40px;
+            width:60%;
+            padding-bottom:20px;
+            margin:30px auto;
+            border-bottom:2px solid black;
+        }
+        ul{
+            margin:0 auto;
+            width:60%;
+            text-align:left;
+            .total:last-child{
+                border-top:2px dashed black;
+                text-align:right;
+            }
+        }
+        button{
+            margin-top:50px;
+            width:60%;
+            height:50px;
+            background-color:black;
+            color:#fff;
+            font-size:24px;
+            border-radius:10px;
+            letter-spacing:5px;
+            font-weight:700;
+        }
+    }
+
 
 `
 
 const Reservation = () => {
-    const [pickupDate,setPickupDate] = useState(new Date());
+    const today = (new Date())
+    const todayformat = `${today.getFullYear()}-
+    ${("00"+(today.getMonth()+1).toString()).slice(-2)}-
+    ${("00"+(today.getDate().toString())).slice(-2)}
+    `
+
+    console.log(today);
+    const [pickupDate,setPickupDate] = useState(today);
 
     const dateFormat = (pickupDate) => {
         if(pickupDate){
@@ -37,7 +144,7 @@ const Reservation = () => {
             <h1>장바구니</h1>
             <h3>가져갈 날짜와 시간을 선택해주세요</h3>
             <ReservationBoard>
-                <MyDatePicker
+                <DatePicker
                     selected={pickupDate}
                     onChange={(date)=>{
                         setPickupDate(date) 
@@ -58,15 +165,19 @@ const Reservation = () => {
                 </div>
                 <div>
                     <h2>Service Details</h2>
-                    <p>
-                        메뉴이름<br/>
-                        픽업일자<br/>
-                        <span>
-                        주문한사람 이름<br/>
-                        갯수<br/>
-                        가격
-                        </span>
-                    </p>
+                    <ul>
+                        <li>메뉴이름  가격  수량  총가격</li>
+                        <li>메뉴이름  가격  수량  총가격</li>
+                        <li>메뉴이름  가격  수량  총가격</li>
+                        <li>메뉴이름  가격  수량  총가격</li>
+                    </ul>
+                    <ul>
+                        <li>총 금 액:  0000</li>
+                        <li>할 인 액: -0000</li>
+                        <li>청구 금액: 0000</li>
+                        <li>포인트 잔액: 0000</li>
+                        <li>주문일 : {todayformat}</li>
+                    </ul>
                     <button>Next</button>
                 </div>
             </ReservationBoard>

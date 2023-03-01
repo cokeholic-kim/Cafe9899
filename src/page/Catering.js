@@ -1,4 +1,5 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 import styled from 'styled-components';
 import Banner from '../components/Banner';
 
@@ -45,7 +46,7 @@ const Cateringitem = ()=>{
                 <h3>상품이름</h3>
                 <p>상품설명</p>
                 <h4>가격</h4>
-                <button>주문하기</button>
+                <Link to="/Reservation"><button>주문하기</button></Link>
             </div>
         </CateringitemStyle>
     )
