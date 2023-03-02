@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useRef, useState } from 'react';
 import DatePicker from 'react-datepicker';
 import "react-datepicker/dist/react-datepicker.css";
 import {ko} from "date-fns/esm/locale"
@@ -7,6 +7,8 @@ import styled from 'styled-components';
 
 const ReservationBoard = styled.div`
     display:flex;
+    padding:20px;
+    >div{height:100%}
     justify-content:space-between;
     .react-datepicker {
     font-size: 1.5em;
@@ -125,17 +127,21 @@ const Reservation = () => {
     ${("00"+(today.getMonth()+1).toString()).slice(-2)}-
     ${("00"+(today.getDate().toString())).slice(-2)}
     `
-
+    //li요소에 클릭이벤트 연결
+    const reserveTime = useRef()
+    reserveTime.current.addEventlistener('click',(e)=>{
+        console.log(e.target)
+    })
     console.log(today);
     const [pickupDate,setPickupDate] = useState(today);
 
     const dateFormat = (pickupDate) => {
         if(pickupDate){
-          const month = pickupDate.toLocaleString("ko",{month:"long"});
-          const monthformat = String(month).length ===1 ? '0'+month: month;
+          const month = pickupDate.getMonth();
+          const monthformat = String(month).padStart(2,"0")
           const date = pickupDate.getDate();
-          const dayformat = String(date).length ===1 ? '0'+date :date ;
-          return `${month} ${dayformat}일`
+          const dayformat = String(date).padStart(2,"0")
+          return `${monthformat}월 ${dayformat}일`
         }
     }
 
@@ -154,7 +160,7 @@ const Reservation = () => {
                 />
                 <div>
                     <p>{dateFormat(pickupDate)}</p>
-                    <ul>
+                    <ul ref={reserveTime}>
                         <li>10:00</li>
                         <li>11:00</li>
                         <li>12:00</li>
