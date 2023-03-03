@@ -65,7 +65,7 @@ const Header = () => {
                 </ul>
                 <h1>9899</h1>
                 <ul>
-                    <li><FaUserCircle/><span>Log In</span></li>
+                    <li><Link to='/Login'><FaUserCircle/><span>Log In</span></Link></li>
                     <li><FaFacebook/></li>
                     <li><AiFillTwitterCircle/></li>
                     <li><AiFillInstagram/></li>

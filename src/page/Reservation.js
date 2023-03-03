@@ -1,4 +1,4 @@
-import React, { useRef, useState } from 'react';
+import React, { useState } from 'react';
 import DatePicker from 'react-datepicker';
 import "react-datepicker/dist/react-datepicker.css";
 import {ko} from "date-fns/esm/locale"
@@ -83,6 +83,7 @@ const ReservationBoard = styled.div`
                 width:45%;
                 margin:2.5%;
                 cursor:pointer;
+                &.active{background-color:gray}
             }
         }
     }
@@ -128,10 +129,6 @@ const Reservation = () => {
     ${("00"+(today.getDate().toString())).slice(-2)}
     `
     //li요소에 클릭이벤트 연결
-    const reserveTime = useRef()
-    reserveTime.current.addEventlistener('click',(e)=>{
-        console.log(e.target)
-    })
     console.log(today);
     const [pickupDate,setPickupDate] = useState(today);
 
@@ -143,6 +140,17 @@ const Reservation = () => {
           const dayformat = String(date).padStart(2,"0")
           return `${monthformat}월 ${dayformat}일`
         }
+    }
+    onclick = (e) =>{
+        let list = document.querySelectorAll('#reserveTime li')
+        list.forEach(li=>{
+            if(e.target == li){
+                li.classList.add('active');
+            } else {
+                li.classList.remove('active')
+            }
+        })
+        console.log(e.target)
     }
 
     return (
@@ -160,13 +168,13 @@ const Reservation = () => {
                 />
                 <div>
                     <p>{dateFormat(pickupDate)}</p>
-                    <ul ref={reserveTime}>
-                        <li>10:00</li>
-                        <li>11:00</li>
-                        <li>12:00</li>
-                        <li>13:00</li>
-                        <li>14:00</li>
-                        <li>15:00</li>
+                    <ul id="reserveTime">
+                        <li onClick={onclick}>10:00</li>
+                        <li onClick={onclick}>11:00</li>
+                        <li onClick={onclick}>12:00</li>
+                        <li onClick={onclick}>13:00</li>
+                        <li onClick={onclick}>14:00</li>
+                        <li onClick={onclick}>15:00</li>
                     </ul>
                 </div>
                 <div>
