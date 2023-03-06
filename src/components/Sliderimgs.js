@@ -43,7 +43,7 @@ const Listimg = styled.li`
 const Sliderimgs = ({imagename}) => {
     return (
         <Listimg>
-            <img src={`../imgs/${imagename}`} />
+            <img src={`../imgs/${imagename}`} alt=""/>
             <div>
             </div>
             <p>인스타태그내용</p>

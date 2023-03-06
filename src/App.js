@@ -7,22 +7,21 @@ import MenuPage from './page/MenuPage';
 import About from './page/About';
 import Catering from './page/Catering';
 import Reservation from './page/Reservation';
-import Login from './page/Login';
-
+import Login from './loginmodule/Login';
+import Join from './loginmodule/Join';
 function App() {
   return (
     <>
       <Globalstyle/>
-      <Header/>
         <Routes>
-          <Route path='/' element={<Mainpage/>}/>
-          <Route path='/Menu' element={<MenuPage/>}/>
-          <Route path='/About' element={<About/>}/>
-          <Route path='/Catering' element={<Catering/>}/>
-          <Route path='/Reservation' element={<Reservation/>}/>
+          <Route path='/' element={<><Header/><Mainpage/><Footer/></>}/>
+          <Route path='/Menu' element={<><Header/><MenuPage/><Footer/></>}/>
+          <Route path='/About' element={<><Header/><About/><Footer/></>}/>
+          <Route path='/Catering' element={<><Header/><Catering/><Footer/></>}/>
+          <Route path='/Reservation' element={<><Header/><Reservation/><Footer/></>}/>
           <Route path='/Login' element={<Login/>}/>
+          <Route path='/Join' element={<Join/>}/>
         </Routes>
-      <Footer/>
     </>
   );
 }

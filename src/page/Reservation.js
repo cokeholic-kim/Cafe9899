@@ -144,7 +144,7 @@ const Reservation = () => {
     onclick = (e) =>{
         let list = document.querySelectorAll('#reserveTime li')
         list.forEach(li=>{
-            if(e.target == li){
+            if(e.target === li){
                 li.classList.add('active');
             } else {
                 li.classList.remove('active')
