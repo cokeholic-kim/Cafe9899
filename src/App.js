@@ -9,6 +9,8 @@ import Catering from './page/Catering';
 import Reservation from './page/Reservation';
 import Login from './loginmodule/Login';
 import Join from './loginmodule/Join';
+import FindPass from './loginmodule/Findpass';
+import UpdatePass from './loginmodule/updatePass';
 function App() {
   return (
     <>
@@ -21,6 +23,8 @@ function App() {
           <Route path='/Reservation' element={<><Header/><Reservation/><Footer/></>}/>
           <Route path='/Login' element={<Login/>}/>
           <Route path='/Join' element={<Join/>}/>
+          <Route path='/findPass' element={<FindPass/>}/>
+          <Route path='/updatePass' element={<UpdatePass/>}/>
         </Routes>
     </>
   );

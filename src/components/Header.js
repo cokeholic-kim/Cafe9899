@@ -1,8 +1,12 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { FaUserCircle,FaFacebook } from "react-icons/fa";
 import {AiFillTwitterCircle,AiFillInstagram} from "react-icons/ai"
 import styled from 'styled-components';
 import { Link } from 'react-router-dom';
+import { useDispatch } from 'react-redux';
+import { setLogin, setLogout } from '../modules/logincheck';
+import { getCookie, removeCookie } from '../util/cookie';
+import { useSelector } from 'react-redux';
 
 const Headerstyle = styled.div`
     &{
@@ -53,6 +57,26 @@ const Headerstyle = styled.div`
 `
 
 const Header = () => {
+    const isLogin = useSelector(state=>state.logincheck.isLogin)
+    const userName = getCookie("userName");
+    const dispatch = useDispatch();
+    const logoutClick = ()=>{
+        removeCookie('userName');
+        removeCookie('userEmail');
+        dispatch(setLogout());
+    }
+
+    useEffect(()=>{
+        const loop = setInterval(()=>{
+            const userName = getCookie("userName")
+            if(userName){
+                dispatch(setLogin()); //헤더에서 다시 디스패치 해주면 새로고침해도 로그아웃안됨
+            }else{
+                dispatch(setLogout())
+                clearInterval(loop)
+            }
+        },3000)
+    },[userName,dispatch])
     return (
         <Headerstyle>
             <div>정성과 마음을 가득 담아만드는 담은 & 구팔구구 | 구움과자 음료 수제도시락</div>
@@ -65,10 +89,18 @@ const Header = () => {
                 </ul>
                 <h1>9899</h1>
                 <ul>
-                    <li><Link to='/Login'><FaUserCircle/><span>Log In</span></Link></li>
-                    <li><FaFacebook/></li>
-                    <li><AiFillTwitterCircle/></li>
-                    <li><AiFillInstagram/></li>
+                    {isLogin ? 
+                    <>
+                        <li onClick={logoutClick}><Link to='/'><FaUserCircle/><span>Log Out</span></Link></li>
+                        <li><Link to="/Mypage">회원정보</Link></li>
+                    </>:
+                    <>
+                        <li><Link to='/Login'><FaUserCircle/><span>Log In</span></Link></li>
+                        <li><FaFacebook/></li>
+                        <li><AiFillTwitterCircle/></li>
+                        <li><AiFillInstagram/></li>
+                    </>
+                    }
                 </ul>
             </div>
         </Headerstyle>

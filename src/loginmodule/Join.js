@@ -1,5 +1,5 @@
 import React, { useRef, useState } from 'react';
-import axios, { formToJSON } from 'axios';
+import axios from 'axios';
 import { Link, useNavigate } from 'react-router-dom';
 import { API_URL } from '../config/apiurl';
 import styled from 'styled-components';
@@ -87,6 +87,13 @@ const Joinpage = styled.div`
     
 `
 
+export const checkPassword= (pass) =>{
+    // 영문자,특수문자,숫자 8~20자 사이
+    const regExp = /^(?=.*[a-zA-Z])(?=.*[!@#$%^&*+=-])(?=.*[0-9]).{8,20}$/;
+    return regExp.test(pass)
+}
+
+
 const Join = () => {
     const passcheck = useRef()
     const pass = useRef()
@@ -98,9 +105,6 @@ const Join = () => {
         m_passch:"",
         m_nickname:"",
         m_email:"",
-        m_phone:"",
-        m_address1:"",
-        m_address2:"",
     });
     const onChange = (e)=>{
         const {name,value} =e.target;
@@ -110,8 +114,11 @@ const Join = () => {
         })
         if(passch.current.value){
             if(pass.current.value !== passch.current.value){
+                passcheck.current.style.color = "red"
                 passcheck.current.innerText = `비밀번호가 일치하지 않습니다.`
+            
             }else{
+                passcheck.current.style.color = "blue"
                 passcheck.current.innerText = `비밀번호가 일치합니다.`
             }
         }else{
@@ -121,56 +128,54 @@ const Join = () => {
     
     //폼전송 이벤트
     const onSubmit = (e) => {
+        const {m_name,m_pass,m_passch,m_nickname,m_email} = formData
         e.preventDefault();
-        if(formData.m_name && formData.m_pass && formData.m_passch &&formData.m_nickname &&formData.m_email){
-            // if(formData.m_pass === formData.m_passch){
-            //         // console.log("비밀번호들 일치")
-            //     if(checkPassword(formData.m_pass) === true){
-            //             // console.log("비밀번호 정규표현식 시작")
-            //         // addMember();
-            //     }else{
-            //         alert("비밀번호의 형식이 일치하지 않습니다.")
-            //             // console.log("정규표현식이 틀림")
-            //     }
-            // }else{
-            //     alert("비밀번호와 비밀번호재확인이 일치하지 않습니다.")
-            // }
-            if(formData.m_email){}
+        if(m_name && m_pass && m_passch && m_nickname && m_email){
+            if(checkEmail()){
+                //이메일 검사 통과
+                if(m_pass === m_passch){
+                    if(checkPassword(m_pass)){
+                        addMember();
+                    }
+                }else{
+                    alert("비밀번호가 일치하는지 확인해주세요.")
+                }
+            }else{
+                //이메일 검사 실패
+                alert(`${m_email}은 사용할수없습니다.`)
+            }
         }else{
             alert("빈칸없이 입력해주세요")
         }
     }
-    // const addMember = () => {
-    //     axios.post(`${API_URL}/join`,formData)
-    //     .then(res=>{
-    //         alert('등록되었습니다.');
-    //         navigate('/');
-    //     })
-    //     .catch(e=>{
-    //         console.log("에러발생")
-    //         console.log(e);
-    //     })
-    // }
-    const checkPassword= (pass) =>{
-        // 영문자,특수문자,숫자 8~20자 사이
-        const regExp = /^(?=.*[a-zA-Z])(?=.*[!@#$%^&*+=-])(?=.*[0-9]).{8,20}$/;
-        return regExp.test(pass)
-        // if(regExp.test(e)){
-        //     // alert("조건을 만족하였습니다.")
-        //     addMember();
-        // }else{
-        //     alert("비밀번호에는 영문자,특수문자,숫자가 1개이상 포함되어야 합니다.")
-        // }
+    const addMember = () => {
+        axios.post(`${API_URL}/join`,formData)
+        .then(res=>{
+            alert('등록되었습니다.');
+            navigate('/');
+        })
+        .catch(e=>{
+            console.log("에러발생")
+            console.log(e);
+        })
     }
-    const checkemail=(e)=>{
+    // const checkPassword= (pass) =>{
+    //     // 영문자,특수문자,숫자 8~20자 사이
+    //     const regExp = /^(?=.*[a-zA-Z])(?=.*[!@#$%^&*+=-])(?=.*[0-9]).{8,20}$/;
+    //     return regExp.test(pass)
+    // }
+    const checkEmailInput=(e)=>{
         e.preventDefault()
+        if(checkEmail()){
+            alert(`${formData.m_email}은 사용가능한 이메일 입니다`)
+        }else{
+            alert(`${formData.m_email}은 사용할수없는 이메일 입니다`)
+        }
+    }
+    const checkEmail = ()=>{
         const {m_email} = formData;
         const regExp = /^[a-zA-Z0-9]+@[a-zA-Z0-9]+.com$/
-        if(regExp.test(m_email)){
-            alert(`${m_email}은 사용가능한 이메일 입니다`)
-        }else{
-            alert(`${m_email}은 사용할수없는 이메일 입니다`)
-        }
+        return regExp.test(m_email)
     }
 
 
@@ -183,7 +188,7 @@ const Join = () => {
                     <label className="label-text" htmlFor="signInEmail">이메일</label>
                     <div className='inputflex'>
                         <input type="text" id="signInEmail" maxLength="30"  name="m_email" value={formData.m_email} onChange={onChange}/>
-                        <button className="email-btn" id="checkEmail" onClick={checkemail}>확인</button>
+                        <button className="email-btn" id="checkEmail" onClick={checkEmailInput}>확인</button>
                     </div>
                 </div>
                 <div className='join-data'>
@@ -223,5 +228,4 @@ const Join = () => {
         </Joinpage>
     );
 };
-
 export default Join;

@@ -1,6 +1,11 @@
-import React from 'react';
-import { Link } from 'react-router-dom';
+import axios from 'axios';
+import React, { useState } from 'react';
+import { useDispatch } from 'react-redux';
+import { Link, useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
+import { API_URL } from '../config/apiurl';
+import { goToHome, setLogin } from '../modules/logincheck';
+import { setCookie } from '../util/cookie';
 
 const LoginStyle = styled.div`
     width:50%;
@@ -101,6 +106,47 @@ const LoginStyle = styled.div`
 `
 
 const Login = () => {
+    const dispatch = useDispatch();
+    const navigate = useNavigate();
+
+    const [loginData,setLoginData] = useState({
+        userEmail:"",
+        userPass:""
+    })
+    const onChange = (e)=> {
+        const {name,value} = e.target;
+        setLoginData({
+            ...loginData,
+            [name]:value
+        })
+    }
+    const onSubmit = (e)=>{
+        e.preventDefault()
+        const {userEmail,userPass} = loginData
+        if(userEmail === '' || userPass === ''){
+            alert('이메일과 비밀번호를 입력해주세요')
+        }else{
+            axios.post(`${API_URL}/login`,loginData)
+            .then(result => {
+                if(result.data === '실패'){
+                    alert("아이디와 비밀번호를 확인해주세요")
+                }
+                const { m_email , m_nickname } = result.data[0];
+                if(m_email && m_nickname){
+                    alert("로그인 되었습니다.");
+                    let expires = new Date();
+                    expires.setMinutes(expires.getMinutes()+60)
+                    setCookie('userEmail',`${m_email}`,{path:'/',expires});
+                    setCookie('userName',`${m_nickname}`,{path:'/',expires});
+                    dispatch(setLogin());
+                    dispatch(goToHome(navigate))
+                }
+            })
+            .catch(e=>{
+                console.log(e)
+            })
+        }
+    }
     return (
         <LoginStyle className='center'>
             <div className='login-container'>
@@ -109,14 +155,14 @@ const Login = () => {
                     <div>정성과 마음을 가득 담아만드는 9899</div>
                 </div>
                 <div>
-                    <form>
+                    <form onSubmit={onSubmit}>
                         <div className='data'>
                             <label>E-mail</label>
-                            <input type='text' name='useremail' required/>
+                            <input type='text' name='userEmail' required onChange={onChange}/>
                         </div>
                         <div className='data'>
                             <label>Password</label>
-                            <input type='password' name='userpass' required/>
+                            <input type='password' name='userPass' required onChange={onChange}/>
                         </div>
                         <div className='forgot-pass'>
                             <Link to="/findPass">비밀번호를 잊으셨나요</Link>
