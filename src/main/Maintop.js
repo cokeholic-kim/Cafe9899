@@ -21,7 +21,6 @@ const MainTopstyle = styled.div`
             left:55%;
             transform:translate(-50%,-50%);
             color: #fff;
-            width:100%;
             p{font-size:60px;}
             h1{font-size:75px; width:100%}
             button{

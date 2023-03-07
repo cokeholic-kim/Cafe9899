@@ -54,6 +54,51 @@ const Headerstyle = styled.div`
             transform:translateX(-50%)
         }
     }
+    .admin{
+        margin-left:20px;
+        display:flex;
+        flex-direction:column;
+        position:relative;
+        width: 80px;
+        :hover div{
+            background-color:gray;
+            color:black;
+        }
+        :hover ul{
+            display:block;
+        }
+        div{
+            background-color: black;
+            color: white;
+            font-size: 20px;
+            border: none;
+            cursor: pointer;
+        }
+        ul{
+            position:absolute;
+            top:50px;
+            display: none;
+            background-color: #f9f9f9;
+
+            width: 80px;
+            box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+            z-index: 1;
+            li{
+                a{
+                    font-size:8px !important;
+                    font-weight:800;
+                }
+                margin-left: 0 !important;
+                color: black;
+                padding: 10px 10px;
+                text-decoration: none;
+                display: block;
+                :hover{
+                    background-color: #f1f1f1;
+                }
+            }
+        }
+    }
 `
 
 const Header = () => {
@@ -93,6 +138,26 @@ const Header = () => {
                     <>
                         <li onClick={logoutClick}><Link to='/'><FaUserCircle/><span>Log Out</span></Link></li>
                         <li><Link to="/Mypage">회원정보</Link></li>
+                        {userName === "코카콜라" ? 
+                        <>
+                        <div className='admin'>
+                            <div>관리</div>
+                            <ul>
+                                <li><Link to="/MenuManage">메뉴관리</Link></li>
+                                <li><Link to="/Mypage">주문관리</Link></li>
+                                <li><Link to="/Mypage">제품포스팅</Link></li>
+                            </ul>
+                        </div>
+                        </>
+                    //     <div class="dropdown">
+                        //     <button class="dropbtn">Dropdown</button>
+                        //     <div class="dropdown-content">
+                            //     <a href="#">Link 1</a>
+                            //     <a href="#">Link 2</a>
+                            //     <a href="#">Link 3</a>
+                        //     </div>
+                    //     </div>
+                        :null}
                     </>:
                     <>
                         <li><Link to='/Login'><FaUserCircle/><span>Log In</span></Link></li>
