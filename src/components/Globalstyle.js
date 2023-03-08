@@ -9,6 +9,11 @@ const Globalstyle = createGlobalStyle`
     }
     a{text-decoration:none; color:inherit;}
     li{list-style:none}
+    .inner {
+    margin: 0 auto;
+    max-width: 1200px;
+    width: 100%;
+    }
     /* .banner{
         text-align:center;
         height:300px;

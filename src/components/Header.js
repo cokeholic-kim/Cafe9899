@@ -145,18 +145,10 @@ const Header = () => {
                             <ul>
                                 <li><Link to="/MenuManage">메뉴관리</Link></li>
                                 <li><Link to="/Mypage">주문관리</Link></li>
-                                <li><Link to="/Mypage">제품포스팅</Link></li>
+                                <li><Link to="/Posting">제품포스팅</Link></li>
                             </ul>
                         </div>
                         </>
-                    //     <div class="dropdown">
-                        //     <button class="dropbtn">Dropdown</button>
-                        //     <div class="dropdown-content">
-                            //     <a href="#">Link 1</a>
-                            //     <a href="#">Link 2</a>
-                            //     <a href="#">Link 3</a>
-                        //     </div>
-                    //     </div>
                         :null}
                     </>:
                     <>
