@@ -1,20 +1,25 @@
-import React from 'react';
+import axios from 'axios';
+import React, { useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import styled from 'styled-components';
 import Banner from '../components/Banner';
+import { API_URL } from '../config/apiurl';
+import useAsync from '../customHook/useAsync';
 
 const CateringitemStyle = styled.div`
-    width:50%;
-    margin:30px auto;
+    width:22%;
+    margin:1.5%;
     text-align:center;
-    background-color:#DDFBE1;
-    height:20vh;
-    position:relative;
+    background-color:rgba(221,251,225,0.4);
+    border-radius:30px;
+    min-height:20vh;
+    padding:40px;
     div{
-        position:absolute;
-        top:50%;
-        left:50%;
-        transform:translate(-50%,-50%);
+        height:100%;
+        img{
+            width: 100%;
+            border-radius:20px;
+        }
         h3{
             font-size:30px;
             font-weight:500;
@@ -39,13 +44,14 @@ const CateringitemStyle = styled.div`
 `
 
 
-const Cateringitem = ()=>{
+const Cateringitem = ({img,price,desc,name})=>{
     return(
         <CateringitemStyle>
             <div>
-                <h3>상품이름</h3>
-                <p>상품설명</p>
-                <h4>가격</h4>
+                <img src={`${API_URL}/upload/menu/${img}`} alt=""/>
+                <h3>{name}</h3>
+                <p>{desc}</p>
+                <h4>{price} 원</h4>
                 <Link to="/Reservation"><button>주문하기</button></Link>
             </div>
         </CateringitemStyle>
@@ -62,9 +68,26 @@ const DescStyle = styled.div`
     }
 `
 
+const Caterstyle = styled.div`
+    .item-box{
+        display:flex;
+        flex-wrap:wrap;
+    }
+`
+
+async function menuFetch(){
+    const response = await axios.get(`${API_URL}/getMenu`);
+    return response.data
+}
+
 const Catering = () => {
+
+    const {loading,error,data} = useAsync(()=>menuFetch(),[])
+    if (loading) return <div>로딩중</div>
+    if (error) return <div>에러발생</div>
+    if (!data) return null  
     return (
-        <div>
+        <Caterstyle>
             <Banner bannerColor="#ABEBB3" TopTitle="CATERING FOR SPECIALDAY" BottomTitle="CATERING"/>
             <DescStyle>
                 <h2>THE BEST DESSERT'S PACK</h2>
@@ -76,9 +99,12 @@ const Catering = () => {
                     I’m a great place for you to tell a story and let your users know a little more about you.
                 </p>
             </DescStyle>
-            <Cateringitem/>
-            <Cateringitem/>
-        </div>
+            <div className='item-box'>
+                {data.map(m=><Cateringitem key={m.m_number} 
+                name={m.m_name} img={m.m_img} 
+                price={m.m_price} desc={m.m_desc}/>)}
+            </div>
+        </Caterstyle>
     );
 };
 

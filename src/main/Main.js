@@ -5,6 +5,8 @@ import Maintop from './Maintop';
 import Slider from './Slider';
 
 const Mainpage = () => {
+
+
     return (
         <>
             <Maintop/>
