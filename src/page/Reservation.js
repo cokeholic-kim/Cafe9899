@@ -1,8 +1,10 @@
-import React, { useState } from 'react';
+import React, { useReducer, useRef, useState } from 'react';
 import DatePicker from 'react-datepicker';
 import "react-datepicker/dist/react-datepicker.css";
 import {ko} from "date-fns/esm/locale"
 import styled from 'styled-components';
+import { useSelector } from 'react-redux';
+import { getToPathname } from '@remix-run/router';
 
 
 const ReservationBoard = styled.div`
@@ -59,32 +61,12 @@ const ReservationBoard = styled.div`
             background-color:gray;
         }
     }
-    >div:nth-child(2){
-        width:30%;
-        margin:0 1.5%;
-        padding:30px 0 ;
-        text-align:center;
-        p{
-            font-size:35px;
-            font-weight:600;
-        }
-        ul{
-            margin-top:30px;
-            display:flex;
-            flex-wrap:wrap;
-            
-            li{
-                background-color:black;
-                color:#fff;
-                font-size:24px;
-                font-weight:600;
-                border-radius:10px;
-                line-height:60px;
-                width:45%;
-                margin:2.5%;
-                cursor:pointer;
-                &.active{background-color:gray}
-            }
+    table{
+        padding-bottom:20px;
+        tbody{
+            width: 60%;
+            margin: 0 auto;
+            th{font-size:80.5%; padding-bottom:10px;}
         }
     }
     >div:nth-child(3){
@@ -123,13 +105,13 @@ const ReservationBoard = styled.div`
 `
 
 const Reservation = () => {
+    const shopcart = useSelector(state=>state.orderAdd.orders)
     const today = (new Date())
     const todayformat = `${today.getFullYear()}-
     ${("00"+(today.getMonth()+1).toString()).slice(-2)}-
     ${("00"+(today.getDate().toString())).slice(-2)}
     `
     //li요소에 클릭이벤트 연결
-    console.log(today);
     const [pickupDate,setPickupDate] = useState(today);
 
     const dateFormat = (pickupDate) => {
@@ -152,7 +134,18 @@ const Reservation = () => {
         })
         console.log(e.target)
     }
+    // const totalprice = ()=>{
+    //     let total = 0
+    //     shopcart.forEach(e => Number(e.price)+total)
+    //     return total
+    // }
+    const total = ()=>{
+        let num = 0
+        shopcart.forEach(e=>num+=Number(e.price))
+        return num
+    }
 
+    console.log(total())
     return (
         <div>
             <h1>장바구니</h1>
@@ -179,18 +172,28 @@ const Reservation = () => {
                 </div>
                 <div>
                     <h2>Service Details</h2>
+                    <table>
+                        <tbody>
+                            <tr>
+                            <th>상품명</th>
+                            <th>가격</th>
+                            <th>개수</th>
+                            <th>총 금액</th>
+                            </tr>
+                            {shopcart.map((e,index)=><tr key={index}>
+                                <td>{e.name}</td>                                
+                                <td>{e.price}</td>                                
+                                <td>{e.count}</td>                                
+                                <td>{e.price * e.count}</td>                                
+                            </tr>)}
+                        </tbody>
+                    </table>
                     <ul>
-                        <li>메뉴이름  가격  수량  총가격</li>
-                        <li>메뉴이름  가격  수량  총가격</li>
-                        <li>메뉴이름  가격  수량  총가격</li>
-                        <li>메뉴이름  가격  수량  총가격</li>
-                    </ul>
-                    <ul>
-                        <li>총 금 액:  0000</li>
+                        <li>총 금 액: {total()}</li>
                         <li>할 인 액: -0000</li>
                         <li>청구 금액: 0000</li>
                         <li>포인트 잔액: 0000</li>
-                        <li>주문일 : {todayformat}</li>
+                        <li>주문일 : </li>
                     </ul>
                     <button>Next</button>
                 </div>

@@ -35,7 +35,6 @@ const Menus = styled.div`
             margin-top:20px;
             width:100px;
             border:1px solid #ccc;
-
         }
         button{
             background-color: #333;

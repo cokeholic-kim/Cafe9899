@@ -1,10 +1,12 @@
 import axios from 'axios';
-import React, { useEffect } from 'react';
+import React, { useEffect, useRef } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
 import styled from 'styled-components';
 import Banner from '../components/Banner';
 import { API_URL } from '../config/apiurl';
 import useAsync from '../customHook/useAsync';
+import { setOrder } from '../modules/oreder';
 
 const CateringitemStyle = styled.div`
     width:22%;
@@ -14,7 +16,7 @@ const CateringitemStyle = styled.div`
     border-radius:30px;
     min-height:20vh;
     padding:40px;
-    div{
+    > div{
         height:100%;
         img{
             width: 100%;
@@ -30,29 +32,95 @@ const CateringitemStyle = styled.div`
         h4{
             margin-top:10px;
         }
-        button{
-            margin-top:10px;
-            width:130px;
-            height:40px;
-            border:none;
-            background-color:#333;
-            color:#fff;
-            font-weight:700;
-            font-size:18px;
+        .countbutton{
+            width:100%;
+            background-color:white; 
+            display:flex;
+            align-items:center;
+            button{
+                width:30%;
+                background:none;
+                :nth-of-type(1){
+                    border:none;
+                    border-right:1px solid #cbd2de;
+                }
+                :nth-of-type(2){
+                    border:none;
+                    border-left:1px solid #cbd2de;
+                }
+            }
+            em{
+                display:block;  
+                width:40%;
+            }
         }
     }
 `
 
 
 const Cateringitem = ({img,price,desc,name})=>{
+    const count = useRef()
+    const dispatch = useDispatch()
+    const orders = useSelector(state=>state.orderAdd.orders)
+    // dispatch 해줄 새로운배열
+    let neworders = [...orders]
+    const Increase = ()=>{
+        if(count.current.innerText > 9){
+            alert("10개 이상의 주문은 전화부탁드립니다.")
+        }
+        else{
+            count.current.innerText++
+            if(Number(count.current.innerText) === 1){
+                neworders.push({
+                    name,
+                    price,
+                    desc,
+                    count:Number(count.current.innerText)
+                })
+                console.log("배열에 추가")
+                console.log(neworders)
+                dispatch(setOrder(neworders))
+            }else{
+                // 배열값을 받아서 같은 상품의이름을 가진 객체가 있으면 수정
+                let index = neworders.findIndex(e => e.name === name);
+                neworders[index] = {
+                    ...neworders[index],
+                    count:Number(count.current.innerText)
+                }
+                console.log(neworders)
+                dispatch(setOrder(neworders))
+            }
+        }
+    }
+    const Decrease = ()=>{
+        if(count.current.innerText>0){
+            count.current.innerText--
+            let index = neworders.findIndex(e => e.name === name);
+            neworders[index] = {
+                ...neworders[index],
+                count:Number(count.current.innerText)
+            }
+            dispatch(setOrder(neworders))
+            if(Number(count.current.innerText) === 0){
+                console.log("배열에서 빼주기")
+                let delorders = neworders.filter(e=>e.name !== name)
+                dispatch(setOrder(delorders))
+            }
+        }
+    }
+
     return(
         <CateringitemStyle>
             <div>
                 <img src={`${API_URL}/upload/menu/${img}`} alt=""/>
                 <h3>{name}</h3>
                 <p>{desc}</p>
+                <div className='countbutton'>
+                    <button onClick={Decrease}>-</button>
+                    <em ref={count}>0</em>
+                    <button onClick={Increase}>+</button>
+                </div>
                 <h4>{price} 원</h4>
-                <Link to="/Reservation"><button>주문하기</button></Link>
             </div>
         </CateringitemStyle>
     )
@@ -73,6 +141,21 @@ const Caterstyle = styled.div`
         display:flex;
         flex-wrap:wrap;
     }
+    a{
+        text-align:center;
+        display:block;
+        margin:20px auto;
+        button{
+                width:200px;
+                height:60px;
+                border:none;
+                background-color:#333;
+                color:#fff;
+                font-weight:700;
+                font-size:18px;
+        }
+    }
+
 `
 
 async function menuFetch(){
@@ -81,7 +164,6 @@ async function menuFetch(){
 }
 
 const Catering = () => {
-
     const {loading,error,data} = useAsync(()=>menuFetch(),[])
     if (loading) return <div>로딩중</div>
     if (error) return <div>에러발생</div>
@@ -104,6 +186,7 @@ const Catering = () => {
                 name={m.m_name} img={m.m_img} 
                 price={m.m_price} desc={m.m_desc}/>)}
             </div>
+            <Link to="/Reservation"><button>주문하기</button></Link>
         </Caterstyle>
     );
 };
