@@ -131,13 +131,14 @@ const Login = () => {
                 if(result.data === '실패'){
                     alert("아이디와 비밀번호를 확인해주세요")
                 }
-                const { m_email , m_nickname } = result.data[0];
+                const { m_email , m_nickname ,m_point } = result.data[0];
                 if(m_email && m_nickname){
                     alert("로그인 되었습니다.");
                     let expires = new Date();
                     expires.setMinutes(expires.getMinutes()+60)
                     setCookie('userEmail',`${m_email}`,{path:'/',expires});
                     setCookie('userName',`${m_nickname}`,{path:'/',expires});
+                    setCookie('userPoint',`${m_point}`,{path:'/',expires});
                     dispatch(setLogin());
                     dispatch(goToHome(navigate))
                 }

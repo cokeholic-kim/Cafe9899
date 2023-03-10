@@ -3,8 +3,13 @@ import DatePicker from 'react-datepicker';
 import "react-datepicker/dist/react-datepicker.css";
 import {ko} from "date-fns/esm/locale"
 import styled from 'styled-components';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
+import {getCookie} from '../util/cookie'
+import Noitem from '../components/Noitem';
+import { setCancel } from '../modules/oreder';
+import { API_URL } from '../config/apiurl';
+import axios from 'axios';
 
 const Titlestyle = styled.h2`
     font-size:40px;
@@ -153,15 +158,24 @@ const ReservationBoard = styled.div`
 
 const Reservation = () => {
     const navigate = useNavigate()
+    const dispatch = useDispatch()
+    const userPoint = getCookie("userPoint")
+
     const shopcart = useSelector(state=>state.orderAdd.orders)
     const today = (new Date())
     const todayformat = `${today.getFullYear()}-
     ${("00"+(today.getMonth()+1).toString()).slice(-2)}-
     ${("00"+(today.getDate().toString())).slice(-2)}
     `
-    const [pickupTime,setPickupTime] = useState("")
+    const [orderData,setOrderData] = useState({
+        o_product:JSON.stringify(shopcart.map(e=>({[e.name]:e.count}))),
+        o_pickupday:"",
+        o_pickuptime:"",
+        o_totalP:total(),
+        o_name:getCookie("userName")
+    })
+    console.log(orderData)
     const [pickupDate,setPickupDate] = useState(today);
-
     const dateFormat = (pickupDate) => {
         if(pickupDate){
           const month = pickupDate.getMonth();
@@ -171,7 +185,7 @@ const Reservation = () => {
           return `${monthformat}월 ${dayformat}일`
         }
     }
-    onclick = (e) =>{
+    const onclick = (e) =>{
         let list = document.querySelectorAll('#reserveTime li')
         list.forEach(li=>{
             if(e.target === li){
@@ -180,24 +194,38 @@ const Reservation = () => {
                 li.classList.remove('active')
             }
         })
-        setPickupTime(e.target.innerText)
-        console.log(pickupTime)
+        if(e.target.tagName === "LI"){
+            setOrderData({
+                ...orderData,
+                o_pickuptime:e.target.innerText
+            })
+        }
     }
 
-    const total = ()=>{
+    function total (){
         let num = 0
         shopcart.forEach(e=>num+=Number(e.price))
         return num
     }
 
     const onPay = ()=>{
-        alert("결제가 완료되었습니다")
-        navigate("/")
+        console.log(orderData)
         // 결제가 완료되면
         // store orders초기화 디스패치
-        // 주문상품,갯수,픽업시간,총금액 데이터베이스에 저장
-        
+        axios.post(`${API_URL}/reservation`,orderData)
+        .then(res=>{
+            alert('등록되었습니다')
+            dispatch(setCancel())
+            navigate("/")
+        })
+        .catch(e=>{
+            console.log("에러발생")
+            console.log(e)
+        })
+        // 주문상품,갯수,픽업시간,총금액 데이터베이스에 저장        
     }
+
+    if(shopcart.length === 0) return <Noitem/>
     return (
         <div>
             <h1>장바구니</h1>
@@ -208,8 +236,12 @@ const Reservation = () => {
                 <DatePicker
                     selected={pickupDate}
                     onChange={(date)=>{
-                        setPickupDate(date) 
-                        console.log(pickupDate)}}
+                        setPickupDate(date)
+                        setOrderData({
+                            ...orderData,
+                            o_pickupday:dateFormat(date)
+                        })
+                        console.log(orderData.o_pickupday)}}
                     locale={ko}
                     inline
                 />
@@ -217,13 +249,13 @@ const Reservation = () => {
                 <div>
                     <ReservationTitle text="PickUp Time"/>
                     <p>{dateFormat(pickupDate)}</p>
-                    <ul id="reserveTime">
-                        <li onClick={onclick}>10:00</li>
-                        <li onClick={onclick}>11:00</li>
-                        <li onClick={onclick}>12:00</li>
-                        <li onClick={onclick}>13:00</li>
-                        <li onClick={onclick}>14:00</li>
-                        <li onClick={onclick}>15:00</li>
+                    <ul id="reserveTime" onClick={onclick}>
+                        <li>10:00</li>
+                        <li>11:00</li>
+                        <li>12:00</li>
+                        <li>13:00</li>
+                        <li>14:00</li>
+                        <li>15:00</li>
                     </ul>
                 </div>
                 <div>
@@ -248,8 +280,8 @@ const Reservation = () => {
                         <li>총 금 액: {total()}</li>
                         <li>할 인 액: { total() > 100000 ? "5%" : "0%"}</li>
                         <li>청구 금액: {total() > 100000 ? total()*(1-0.05) : total()} 원</li>
-                        <li>포인트 잔액: 멤버의포인트데이터베이스연결</li>
-                        <li>주문일 : {dateFormat(pickupDate)} {pickupTime}</li>
+                        <li>포인트 잔액: {userPoint}</li>
+                        <li>주문일 : {orderData.o_pickupday} {orderData.o_pickuptime}</li>
                     </ul>
                     <button onClick={onPay}>결제하기</button>
                 </div>

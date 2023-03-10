@@ -1,5 +1,6 @@
 import React from 'react';
 import styled from 'styled-components';
+import { API_URL } from '../config/apiurl';
 
 const Listimg = styled.li`
     &{
@@ -43,7 +44,7 @@ const Listimg = styled.li`
 const Sliderimgs = ({imagename}) => {
     return (
         <Listimg>
-            <img src={`../imgs/${imagename}`} alt=""/>
+            <img src={`${API_URL}/upload/post/${imagename}`} alt=""/>
             <div>
             </div>
             <p>인스타태그내용</p>

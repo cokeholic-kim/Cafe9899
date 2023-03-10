@@ -1,7 +1,7 @@
 import axios from 'axios';
 import React, { useEffect, useRef } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 import Banner from '../components/Banner';
 import { API_URL } from '../config/apiurl';
@@ -141,20 +141,19 @@ const Caterstyle = styled.div`
         display:flex;
         flex-wrap:wrap;
     }
-    a{
+    >button{
         text-align:center;
         display:block;
         margin:20px auto;
-        button{
-                width:200px;
-                height:60px;
-                border:none;
-                background-color:#333;
-                color:#fff;
-                font-weight:700;
-                font-size:18px;
-        }
+        width:200px;
+        height:60px;
+        border:none;
+        background-color:#333;
+        color:#fff;
+        font-weight:700;
+        font-size:18px;
     }
+
 
 `
 
@@ -164,6 +163,21 @@ async function menuFetch(){
 }
 
 const Catering = () => {
+    const navigate = useNavigate()
+    const orders = useSelector(state=>state.orderAdd.orders)
+    const Login = useSelector(state=>state.logincheck.isLogin)
+    const onBtnClick = ()=>{
+        if(Login){
+            if(orders.length === 0){
+                alert("상품을 선택해 주세요")
+            }else{
+                navigate("/Reservation")
+            }
+        }else{
+            alert("로그인이 필요합니다.")
+            navigate("/Login")
+        }
+    }
     const {loading,error,data} = useAsync(()=>menuFetch(),[])
     if (loading) return <div>로딩중</div>
     if (error) return <div>에러발생</div>
@@ -186,7 +200,9 @@ const Catering = () => {
                 name={m.m_name} img={m.m_img} 
                 price={m.m_price} desc={m.m_desc}/>)}
             </div>
-            <Link to="/Reservation"><button>주문하기</button></Link>
+            <button onClick={onBtnClick}>주문하기</button>:
+        
+            
         </Caterstyle>
     );
 };
