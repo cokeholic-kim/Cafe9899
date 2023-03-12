@@ -4,16 +4,14 @@ import { AiFillTwitterCircle,AiFillInstagram } from 'react-icons/ai'
 import styled from 'styled-components';
 
 const Footerstyle = styled.footer`
-    &{
-        position:relative;
-        z-index:2;
-        background-color:black;
-        padding:40px 20px;
-        display:flex;
-        flex-direction:column;
-        color:#fff;
-        height:30vh;
-    }
+    position:relative;
+    z-index:2;
+    background-color:black;
+    padding:40px 20px;
+    display:flex;
+    flex-direction:column;
+    color:#fff;
+    height:30vh;
     &>ul{
         display:flex;
         li{
@@ -40,7 +38,7 @@ const Footerstyle = styled.footer`
         
     }
     &>div{
-        margin-top:50px;
+        margin-top:20px;
         display:flex;
         p{
             width:66%;

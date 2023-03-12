@@ -12,7 +12,7 @@ const FlowSectionStyle = styled.div`
                 text-align:center;
                 img{
                     width:100%;
-                    height:200%;
+                    height:auto;
                 }
             }
         }

@@ -8,8 +8,9 @@ const MainSub = styled.div`
         width:100%;
         height:350px;
         display:flex;
+        overflow:hidden;
         &>div{width:50%}
-        img{width:100%; height:100%}
+        img{width:100%; height:auto;}
         div:nth-of-type(2){
             position:relative;
             background-color:white;

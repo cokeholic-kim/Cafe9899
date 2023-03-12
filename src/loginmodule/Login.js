@@ -1,9 +1,9 @@
 import axios from 'axios';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { Link, useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
-import { API_URL } from '../config/apiurl';
+import { API_URL, KAKAO_AUTH_URL } from '../config/apiurl';
 import { goToHome, setLogin } from '../modules/logincheck';
 import { setCookie } from '../util/cookie';
 
@@ -106,6 +106,16 @@ const LoginStyle = styled.div`
 `
 
 const Login = () => {
+    // useEffect(()=>{
+    //     const script = document.createElement('script')
+    //     script.src = 'https://developers.kakao.com/sdk/js/kakao.js'
+    //     script.async = true;
+    //     document.body.appendChild(script);
+    //     const script2 = document.createElement('script')
+    //     script2.innerText = "KaKao.init('aaf997d1f0851fa35488f191878d7a4c')"
+    //     document.body.appendChild(script2)
+    // },[])
+    
     const dispatch = useDispatch();
     const navigate = useNavigate();
 
@@ -184,9 +194,9 @@ const Login = () => {
                     </div>
                     <div className="socialBtn-container">
                         <div className="socialBtn">
-                            <div className="socialBtn-image-container" onClick={(e)=>{console.log(e)}}>
+                            <a href={KAKAO_AUTH_URL}>
                                 <img src="/imgs/kakaolink_btn.png" alt="logo"/>
-                            </div>
+                            </a>
                         </div>
                         <div className="socialBtn">
                             <div className="socialBtn-image-container" onClick={(e)=>{console.log(e)}}>

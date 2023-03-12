@@ -14,11 +14,11 @@ const ImgSlider = styled.div`
     margin-bottom:-4px;
     .slick-prev {
         left:0;
-        z-index: 9999;
+        z-index: 2;
     }
     .slick-next {
         right: 40px;
-        z-index: 9999;
+        z-index: 2;
     }
     .slick-prev:before,
     .slick-next:before {
@@ -38,19 +38,21 @@ async function PostFetch(){
     return response.data
 }
 
-const SliderComp = () => {
+const SliderComp = ({onClick}) => {
     const {loading,error,data} = useAsync(()=>PostFetch(),[])
     if (loading) return <div>로딩중</div>
     if (error) return <div>에러발생</div>
     if (!data) return null  
 
-    console.log(data)
     const settings = {
         // dots:false,
         infinite: true,
         speed:500,
         slidesToShow:4,
         slidesToScroll:1,
+        autoplay:true,
+        autoplaySpeed:2000,
+        cssEase: "linear",
         // 반응형 슬라이드구문
         responsive:[
             {
@@ -76,26 +78,9 @@ const SliderComp = () => {
     return (
         <ImgSlider>
             <Slider {...settings}>
-                {data.map(e=><Sliderimgs imagename={e.p_img}/>)}
-                    {/* <Sliderimgs imagename="Cookie.jpg"/>
-                    <Sliderimgs imagename="lotuscookie.jpg"/>
-                    <Sliderimgs imagename="muffin.jpg"/>
-                    <Sliderimgs imagename="saltbread.jpg"/>
-                    <Sliderimgs imagename="Cookie.jpg"/>
-                    <Sliderimgs imagename="lotuscookie.jpg"/>
-                    <Sliderimgs imagename="muffin.jpg"/>
-                    <Sliderimgs imagename="saltbread.jpg"/>
- */}
+                {data.map((e,index)=><Sliderimgs key={index} data={e} onClick={onClick}/>)}
             </Slider>
         </ImgSlider>
-        // <ImgSlider>
-        //     <ul className='slider'>
-                // <Sliderimgs imagename="Cookie.jpg"/>
-                // <Sliderimgs imagename="lotuscookie.jpg"/>
-                // <Sliderimgs imagename="muffin.jpg"/>
-                // <Sliderimgs imagename="saltbread.jpg"/>
-        //     </ul>
-        // </ImgSlider>
     );
 };
 

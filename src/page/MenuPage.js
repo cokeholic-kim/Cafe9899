@@ -1,11 +1,17 @@
+import axios from 'axios';
 import React from 'react';
+import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 import Banner from '../components/Banner';
+import { API_URL } from '../config/apiurl';
+import useAsync from '../customHook/useAsync';
 
 const MenuStyle = styled.li`
     width:23%;
     margin:5%;
     img{
+        min-width: 135px;
+        min-height: 135px;
         width:100%;
         border-radius:50%;
     }
@@ -30,14 +36,21 @@ const MenuStyle = styled.li`
 
 `
 
-const Menu = () =>{
+
+const Menu = ({menu}) =>{
+    const navigate = useNavigate()
+    const onClick = ()=>{
+        navigate(`/menuDetail/${menu.m_number}`)
+    }
     return(
     <MenuStyle>
-        <img src='../imgs/Cookie.jpg' alt=''/>
-        <div>
-            <p className='menutitle'>메뉴이름</p>
-            <p className='menudesc'>메뉴설명</p>
-            <p className='menuprice'>메뉴가격</p>
+        <div onClick={onClick}>
+            <img src={`${API_URL}/upload/menu/${menu.m_img}`} alt=''/>
+            <div>
+                <p className='menutitle'>{menu.m_name}</p>
+                <p className='menudesc'>{menu.m_desc}</p>
+                <p className='menuprice'>{menu.m_price} 원</p>
+            </div>
         </div>
     </MenuStyle>
     )
@@ -66,8 +79,19 @@ const MenuPageStyled = styled.div`
     }
 `
 
+async function menuFetch(){
+    const response = await axios.get(`${API_URL}/getMenu`);
+    return response.data
+}
 
 const MenuPage = () => {
+    const {loading,error,data} = useAsync(()=>menuFetch(),[])
+    if (loading) return <div>로딩중</div>
+    if (error) return <div>에러발생</div>
+    if (!data) return null  
+    const bread = data.filter(e=>e.m_category === "bread")
+    const drink = data.filter(e=>e.m_category === "drink")
+    const giftset = data.filter(e=>e.m_category === "giftset")
     return (
         <MenuPageStyled>
             <Banner bannerColor={"#96F2E0"} TopTitle="9899" BottomTitle="THE MENUS"/>
@@ -75,28 +99,19 @@ const MenuPage = () => {
             <div className='breads_menu'>
                 <h2>BREADS</h2>
                 <ul>
-                    <Menu/>
-                    <Menu/>
-                    <Menu/>
-                    <Menu/>
+                    {bread.map((e,index)=><Menu key={index} menu={e}/>)}
                 </ul>
             </div>
             <div className='cookies_menu'>
-                <h2>BREADS</h2>
+                <h2>DRINKS</h2>
                 <ul>
-                    <Menu/>
-                    <Menu/>
-                    <Menu/>
-                    <Menu/>
+                    {drink.map((e,index)=><Menu key={index} menu={e}/>)}
                 </ul>
             </div>
             <div className='drinks_menu'>
-                <h2>BREADS</h2>
+                <h2>GIFTSET</h2>
                 <ul>
-                    <Menu/>
-                    <Menu/>
-                    <Menu/>
-                    <Menu/>
+                    {giftset.map((e,index)=><Menu key={index} menu={e}/>)}
                 </ul>
             </div>
         </MenuPageStyled>

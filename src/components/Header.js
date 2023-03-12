@@ -128,11 +128,10 @@ const Header = () => {
             <div className='nav'>
                 <ul>
                     <li><Link to='/Menu'>MENU</Link></li>
-                    <li>ORDER ONLINE</li>
-                    <li><Link to='/Catering'>CATERING SERVICE</Link></li>
+                    <li><Link to='/Catering'>ORDERING</Link></li>
                     <li><Link to='/About'>ABOUT</Link></li>
                 </ul>
-                <h1>9899</h1>
+                <h1><Link to="/">9899</Link></h1>
                 <ul>
                     {isLogin ? 
                     <>
@@ -143,8 +142,9 @@ const Header = () => {
                         <div className='admin'>
                             <div>관리</div>
                             <ul>
-                                <li><Link to="/MenuManage">메뉴관리</Link></li>
-                                <li><Link to="/Mypage">주문관리</Link></li>
+                                <li><Link to="/MenuManage">메뉴등록</Link></li>
+                                <li><Link to="/OrderManage">주문관리</Link></li>
+                                <li><Link to="/Menus">메뉴관리</Link></li>
                                 <li><Link to="/Posting">제품포스팅</Link></li>
                             </ul>
                         </div>

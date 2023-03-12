@@ -168,7 +168,7 @@ const Reservation = () => {
     ${("00"+(today.getDate().toString())).slice(-2)}
     `
     const [orderData,setOrderData] = useState({
-        o_product:JSON.stringify(shopcart.map(e=>({[e.name]:e.count}))),
+        o_product:JSON.stringify(shopcart.map(e=>({name:[e.name],count:e.count}))),
         o_pickupday:"",
         o_pickuptime:"",
         o_totalP:total(),
@@ -178,11 +178,13 @@ const Reservation = () => {
     const [pickupDate,setPickupDate] = useState(today);
     const dateFormat = (pickupDate) => {
         if(pickupDate){
+            
           const month = pickupDate.getMonth();
-          const monthformat = String(month).padStart(2,"0")
+          const monthformat = String(month+1).padStart(2,"0")
           const date = pickupDate.getDate();
           const dayformat = String(date).padStart(2,"0")
-          return `${monthformat}월 ${dayformat}일`
+          const year = pickupDate.getFullYear()
+          return `${year}-${monthformat}-${dayformat}`
         }
     }
     const onclick = (e) =>{
@@ -241,6 +243,7 @@ const Reservation = () => {
                             ...orderData,
                             o_pickupday:dateFormat(date)
                         })
+
                         console.log(orderData.o_pickupday)}}
                     locale={ko}
                     inline
@@ -281,7 +284,7 @@ const Reservation = () => {
                         <li>할 인 액: { total() > 100000 ? "5%" : "0%"}</li>
                         <li>청구 금액: {total() > 100000 ? total()*(1-0.05) : total()} 원</li>
                         <li>포인트 잔액: {userPoint}</li>
-                        <li>주문일 : {orderData.o_pickupday} {orderData.o_pickuptime}</li>
+                        <li>픽업일 : {orderData.o_pickupday} {orderData.o_pickuptime}</li>
                     </ul>
                     <button onClick={onPay}>결제하기</button>
                 </div>

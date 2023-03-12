@@ -13,6 +13,13 @@ import FindPass from './loginmodule/Findpass';
 import UpdatePass from './loginmodule/updatePass';
 import MenuManagement from './page/MenuManagement';
 import Posting from './page/Posting';
+import OrderManage from './page/OrderManage';
+import Menuview from './page/Menuview';
+import MenuUpadate from './page/MenuUpadate';
+import { Menu } from 'antd';
+import MenuDetail from './page/MenuDetail';
+import KakaoLogin from './loginmodule/KakaoLogin';
+
 function App() {
   return (
     <>
@@ -25,11 +32,15 @@ function App() {
           <Route path='/Reservation' element={<><Header/><Reservation/><Footer/></>}/>
           <Route path='/MenuManage' element={<><Header/><MenuManagement/><Footer/></>}/>
           <Route path='/Posting' element={<><Header/><Posting/><Footer/></>}/>
-          
+          <Route path='/OrderManage' element={<><Header/><OrderManage/><Footer/></>}/>
+          <Route path='/Menus' element={<><Header/><Menuview/><Footer/></>}/>
+          <Route path='/menuUpdate/:m_number' element={<><Header/><MenuUpadate/><Footer/></>}/>
+          <Route path='/menuDetail/:m_number' element={<><Header/><MenuDetail/><Footer/></>}/>
           <Route path='/Login' element={<Login/>}/>
+          <Route path='/KAKAOLOGIN' element={<KakaoLogin/>}/>
           <Route path='/Join' element={<Join/>}/>
           <Route path='/findPass' element={<FindPass/>}/>
-          <Route path='/updatePass' element={<UpdatePass/>}/>
+          <Route path='/updatePass:m_number' element={<UpdatePass/>}/>
 
         </Routes>
     </>

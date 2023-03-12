@@ -27,6 +27,7 @@ const Listimg = styled.li`
             transform:translate(-50%,-50%);
             transition:0.3s;
             color:rgba(0,0,0,0);
+            width:80%;
         }
         &:hover{
                 p{
@@ -41,13 +42,14 @@ const Listimg = styled.li`
     }
 `
 
-const Sliderimgs = ({imagename}) => {
+const Sliderimgs = ({onClick,data}) => {
+    const hashes = JSON.parse(data.p_hashtag)
     return (
-        <Listimg>
-            <img src={`${API_URL}/upload/post/${imagename}`} alt=""/>
-            <div>
-            </div>
-            <p>인스타태그내용</p>
+        <Listimg onClick={()=>onClick(data)}>
+                <img src={`${API_URL}/upload/post/${data.p_img}`} alt=""/>
+                <div>
+                </div>
+                <p>{hashes.map(tag=>`#${tag} `)}</p>
         </Listimg>
 );
 };

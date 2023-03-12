@@ -70,7 +70,8 @@ const MenuManagement = () => {
         m_name:"",
         m_price:0,
         m_desc:"",
-        m_img:""
+        m_img:"",
+        m_category:""
     })
 
     const onChange = (e) => {
@@ -122,6 +123,17 @@ const MenuManagement = () => {
                             <tr>
                                 <td>가격</td>
                                 <td><input type="number" name="m_price" value={formData.m_price} onChange={onChange} step={100}/></td>
+                            </tr>
+                            <tr>
+                                <td>카테고리</td>
+                                <td>
+                                    <select name='m_category' onChange={onChange}>
+                                        <option value=""></option>
+                                        <option value="bread">Bread</option>
+                                        <option value="drink">Drink</option>
+                                        <option value="giftset">GiftSet</option>
+                                    </select>
+                                </td>
                             </tr>
                             <tr>
                                 <td>설명</td>
