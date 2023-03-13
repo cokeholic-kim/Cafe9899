@@ -4,6 +4,7 @@ import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 import Title from '../components/Title';
 import { API_URL } from '../config/apiurl';
+import { getCookie } from '../util/cookie';
 
 const Poststyle = styled.div`
     table{
@@ -112,6 +113,7 @@ const Posting = () => {
     const navigate = useNavigate()
     const hashtagInput = useRef()
     const [formData,setFormData] = useState({
+        p_user:getCookie("userName"),
         p_desc:"",
         p_hashtag:[],
         p_img:"",
@@ -183,7 +185,7 @@ const Posting = () => {
                     <table>
                         <tbody>
                                 <tr>
-                                    <td>상품 이미지</td>
+                                    <td>이미지</td>
                                     <td>
                                         <label htmlFor="file">
                                             <div className="btn-upload">파일 업로드하기</div>

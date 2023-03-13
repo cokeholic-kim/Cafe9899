@@ -137,6 +137,7 @@ const Header = () => {
                     <>
                         <li onClick={logoutClick}><Link to='/'><FaUserCircle/><span>Log Out</span></Link></li>
                         <li><Link to="/Mypage">회원정보</Link></li>
+                        <li><Link to="/Posting">포스팅</Link></li>
                         {userName === "코카콜라" ? 
                         <>
                         <div className='admin'>

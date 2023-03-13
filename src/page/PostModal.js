@@ -1,10 +1,12 @@
-import React from 'react';
+import React, { useState } from 'react';
 import styled from 'styled-components';
 import { AiOutlineMore,AiOutlineHeart } from "react-icons/ai";
 import { FiMessageCircle } from "react-icons/fi";
 import { IoPaperPlaneOutline } from "react-icons/io5";
 import { ImCross } from "react-icons/im";
 import { API_URL } from '../config/apiurl';
+import useAsync from '../customHook/useAsync';
+import axios from 'axios';
 
 const Modalstyle = styled.div`
     background: rgba(0,0,0,.6);
@@ -55,23 +57,79 @@ const Modalstyle = styled.div`
         }
         div:nth-of-type(3){
             font-size:24px;
-            svg{margin:5px}
+            svg{
+                margin:5px;
+                transition:0.3s;
+                &:hover{
+                    transform:scale(1.2);
+                }
+            }
         }
         div:nth-of-type(4){
             padding:0 15px;
         }
+        div:nth-of-type(5){
+            height:18%;
+        }
+        div:nth-of-type(6){
+            input{
+                position:absolute;
+                bottom:0;
+                width:100%;
+                height:38px;
+                border-color:#f1f1f1;
+            }
+        }
     }
 `
+async function commentfetch(){
+    const response = await axios.get(`${API_URL}/getComment`);
+    return response.data
+}
+
 
 const PostModal = ({data,onClose}) => {
     const hashes = JSON.parse(data.p_hashtag)
+    const [Like,setLike] = useState(data.p_like)
+    const [comment,setComment] = useState()
+    const onChange = (e)=>{
+        setComment(e.target.value)
+    }
+    const onClickclose = (e)=>{
+        if(e.target.id === "Postback"){
+            onClose()
+        }
+    }
+    const onClicklike = ()=>{
+        setLike(Like+1)
+        const newlike = Like+1
+        axios.post(`${API_URL}/postLike`,{p_like:newlike,p_id:data.p_id})
+        .then(res=>console.log("좋아요"))
+        .catch(e=>console.log(e))
+    }
+    const onSubmit = (e)=>{
+        e.preventDefault()
+        if(comment){
+            axios.post(`${API_URL}/addComment`,{c_comment:comment,c_postid:data.p_id,c_user:data.p_user})
+            .then(res=>{
+                setComment("")
+                console.log("댓글등록")
+            })
+            .catch(e=>console.log(e))
+            }
+    }
+    let {loading,error,data:commentdata} = useAsync(()=>commentfetch(),[])
+    if (loading) return <div>로딩중</div>
+    if (error) return <div>에러발생</div>
+    if (!commentdata) return null  
+    console.log(commentdata)
     return (
-        <Modalstyle>
+        <Modalstyle onClick={onClickclose} id="Postback">
             <div id="popup">
                 <div id='postheader'>
                     <div>
                         <img src='./imgs/logo.jpg' alt="관리자 이미지"/>
-                        <p>9899</p>
+                        <p>{data.p_user}</p>
                     </div>
                     <ImCross onClick={onClose}/>
                 </div>
@@ -79,14 +137,22 @@ const PostModal = ({data,onClose}) => {
                     <img src={`${API_URL}/upload/post/${data.p_img}`}/>
                 </div>
                 <div>
-                    <AiOutlineHeart/>
+                    <AiOutlineHeart onClick={onClicklike}/>
                     <FiMessageCircle/>
                     <IoPaperPlaneOutline/>
                 </div>
                 <div>
-                    <strong>좋아요 맻개고?</strong>
+                    <strong>좋아요 {Like}개</strong>
                     <p>{hashes.map(tag=>`#${tag} `)}</p>
                     <p>{data.p_desc}</p>
+                </div>
+                <div>
+                
+                </div>
+                <div id="addcomment">
+                    <form onSubmit={onSubmit}>
+                        <input placeholder='댓글 추가' onChange={onChange} value={comment}></input>
+                    </form>
                 </div>
             </div>
         </Modalstyle>
