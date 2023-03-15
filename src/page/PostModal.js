@@ -70,6 +70,7 @@ const Modalstyle = styled.div`
         }
         div:nth-of-type(5){
             height:18%;
+            max-height:200px;
         }
         div:nth-of-type(6){
             input{
@@ -147,7 +148,12 @@ const PostModal = ({data,onClose}) => {
                     <p>{data.p_desc}</p>
                 </div>
                 <div>
-                
+                    {commentdata.map(comment =>
+                        <div key={comment.c_id}>
+                            <p>{comment.c_user}</p>
+                            <p>{comment.c_comment}</p>
+                        </div>
+                    )}
                 </div>
                 <div id="addcomment">
                     <form onSubmit={onSubmit}>
