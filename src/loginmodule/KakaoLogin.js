@@ -13,11 +13,7 @@ const KakaoLogin = () => {
         let grant_type = "authorization_code"
         let client_id = CLIENT_ID
 
-        axios.post(`https://kauth.kakao.com/oauth/token?
-        grant_type=${grant_type}
-        &client_id=${client_id}
-        &redirect_uri=http://localhost:3000/KAKAOLOGIN
-        &code=${code}`
+        axios.post(`https://kauth.kakao.com/oauth/token?grant_type=${grant_type}&client_id=${client_id}&redirect_uri=http://localhost:3000/KAKAOLOGIN&code=${code}`
         ,{
             headers: {
                 'Content-type': 'application/x-www-form-urlencoded;charset=utf-8'

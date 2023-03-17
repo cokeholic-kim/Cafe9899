@@ -66,7 +66,7 @@ const Menuview = () => {
                     <th>상품가격</th>
                     <th>카테고리</th>
                 </tr>
-                {data.map(e=><Tablerow menu={e}/>)}
+                {data.map((e,index)=><Tablerow key={index} menu={e}/>)}
             </tbody>
         </Tablestyle>
     );

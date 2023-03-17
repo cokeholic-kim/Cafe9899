@@ -9,20 +9,26 @@ import useAsync from '../customHook/useAsync';
 const MenuStyle = styled.li`
     width:23%;
     margin:5%;
+    display:flex;
+    flex-direction:column;
+    justify-content:center;
+
     img{
-        min-width: 135px;
-        min-height: 135px;
-        width:100%;
+        width: 200px;
+        height: 200px;
         border-radius:50%;
     }
     div{
         text-align:center;
         margin-top:20px;
         .menutitle{
-            font-size:25px;
-            font-weight:500;
-            padding-bottom:15px;
+            height:70px;
             border-bottom:2px solid #333;
+            p{
+                font-size:25px;
+                font-weight:500;
+                padding-bottom:15px;
+            }
         }
         .menudesc{
             margin-top:20px;
@@ -47,7 +53,9 @@ const Menu = ({menu}) =>{
         <div onClick={onClick}>
             <img src={`${API_URL}/upload/menu/${menu.m_img}`} alt=''/>
             <div>
-                <p className='menutitle'>{menu.m_name}</p>
+                <div className='menutitle'>
+                    <p>{menu.m_name}</p>
+                </div>
                 <p className='menudesc'>{menu.m_desc}</p>
                 <p className='menuprice'>{menu.m_price} 원</p>
             </div>
@@ -65,6 +73,7 @@ const MenuPageStyled = styled.div`
     div:not(:first-child){
         ul{
             display:flex;
+            justify-content:flex-start;
             flex-wrap:wrap;
             width:70%;
             margin:30px auto;

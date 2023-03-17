@@ -27,7 +27,7 @@ const Modalstyle = styled.div`
         transform:translate(-50%,-50%);
         width: 60vw;   
         height:80vh; 
-        div:nth-of-type(1){
+        >div:nth-of-type(1){
             display:flex;
             justify-content:space-between;
             align-items:center;
@@ -44,7 +44,7 @@ const Modalstyle = styled.div`
             }
 
         }
-        div:nth-of-type(2){
+        >div:nth-of-type(2){
             width:100%;
             height:60%;
             overflow:hidden;
@@ -55,7 +55,7 @@ const Modalstyle = styled.div`
                 height:100%;
             }
         }
-        div:nth-of-type(3){
+        >div:nth-of-type(3){
             font-size:24px;
             svg{
                 margin:5px;
@@ -65,14 +65,37 @@ const Modalstyle = styled.div`
                 }
             }
         }
-        div:nth-of-type(4){
+        >div:nth-of-type(4){
             padding:0 15px;
         }
-        div:nth-of-type(5){
+        >div:nth-of-type(5){
             height:18%;
             max-height:200px;
+            background-color:#f1f1f1;
+            overflow:scroll;
+            div{
+                display:flex;
+                align-items:center;
+                margin:5px 0;
+                .comment{
+                    margin-left:10px;
+                }
+                .nameborder{
+                    width:35px;
+                    height:35px;
+                    line-height:35px;
+                    border-radius:50%;
+                    overflow:hidden;
+                    text-align:center;
+                    background-color:purple;
+                    p{
+                        color:#fff;
+                        font-weight:600;
+                    }
+                }
+            }
         }
-        div:nth-of-type(6){
+        >div:nth-of-type(6){
             input{
                 position:absolute;
                 bottom:0;
@@ -83,15 +106,26 @@ const Modalstyle = styled.div`
         }
     }
 `
-async function commentfetch(){
-    const response = await axios.get(`${API_URL}/getComment`);
+async function commentfetch(id){
+    const response = await axios.get(`${API_URL}/getComment/${id}`);
     return response.data
 }
 
 
 const PostModal = ({data,onClose}) => {
-    const hashes = JSON.parse(data.p_hashtag)
     const [Like,setLike] = useState(data.p_like)
+
+    async function getLike(id){
+        try{
+            const response = await axios.get(`${API_URL}/getLike/${id}`)
+            console.log(response.data[0].p_like)
+            setLike(response.data[0].p_like)
+        }catch(error){
+            console.log(error);
+        }
+    }
+    getLike(data.p_id)
+    const hashes = JSON.parse(data.p_hashtag)
     const [comment,setComment] = useState()
     const onChange = (e)=>{
         setComment(e.target.value)
@@ -104,6 +138,7 @@ const PostModal = ({data,onClose}) => {
     const onClicklike = ()=>{
         setLike(Like+1)
         const newlike = Like+1
+        console.log(newlike)
         axios.post(`${API_URL}/postLike`,{p_like:newlike,p_id:data.p_id})
         .then(res=>console.log("좋아요"))
         .catch(e=>console.log(e))
@@ -119,7 +154,7 @@ const PostModal = ({data,onClose}) => {
             .catch(e=>console.log(e))
             }
     }
-    let {loading,error,data:commentdata} = useAsync(()=>commentfetch(),[])
+    let {loading,error,data:commentdata} = useAsync(()=>commentfetch(data.p_id),[])
     if (loading) return <div>로딩중</div>
     if (error) return <div>에러발생</div>
     if (!commentdata) return null  
@@ -150,8 +185,10 @@ const PostModal = ({data,onClose}) => {
                 <div>
                     {commentdata.map(comment =>
                         <div key={comment.c_id}>
-                            <p>{comment.c_user}</p>
-                            <p>{comment.c_comment}</p>
+                            <div className='nameborder'>
+                                <p>{comment.c_user}</p>
+                            </div>
+                            <p className='comment'>{comment.c_comment}</p>
                         </div>
                     )}
                 </div>
