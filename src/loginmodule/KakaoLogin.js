@@ -1,25 +1,39 @@
 import axios from 'axios';
 import React, { useEffect } from 'react';
-import { useParams } from 'react-router-dom';
+import { useDispatch } from 'react-redux';
+import { useNavigate } from 'react-router-dom';
 import { CLIENT_ID } from '../config/apiurl';
+import { goToHome, setLogin } from '../modules/logincheck';
+import { setCookie } from '../util/cookie';
 
 const KakaoLogin = () => {
-    let params = new URL(document.location.toString()).searchParams;    
-    let code = params.get("code")
-    console.log(code)
+    const dispatch = useDispatch()
+    const navigate = useNavigate()
+    let data
     useEffect(()=>{
-        let params = new URL(document.location.toString()).searchParams;
-        let code = params.get("code");
+        let code = new URL(window.location.href).searchParams.get("code")
         let grant_type = "authorization_code"
         let client_id = CLIENT_ID
-
         axios.post(`https://kauth.kakao.com/oauth/token?grant_type=${grant_type}&client_id=${client_id}&redirect_uri=http://localhost:3000/KAKAOLOGIN&code=${code}`
         ,{
             headers: {
                 'Content-type': 'application/x-www-form-urlencoded;charset=utf-8'
             }
-        }).then((res)=>{
-            console.log(res)
+        }).then(async (res)=>{
+            console.log(res.data)
+            window.Kakao.init(CLIENT_ID)
+            window.Kakao.Auth.setAccessToken(res.data.access_token)
+            data = await window.Kakao.API.request({
+                url:"/v2/user/me"
+            })
+            console.log(data.properties.nickname)
+            let expires = new Date();
+            expires.setMinutes(expires.getMinutes()+60)
+            setCookie('userEmail',`${data.kakao_account.email}`,{path:'/',expires});
+            setCookie('userName',`${data.properties.nickname}`,{path:'/',expires});
+            dispatch(setLogin())
+            dispatch(goToHome(navigate))
+            
         }).catch(e=>console.log(e))
     },[])
     return (
