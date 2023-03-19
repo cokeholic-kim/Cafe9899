@@ -33,7 +33,7 @@ const KakaoLogin = () => {
             setCookie('userName',`${data.properties.nickname}`,{path:'/',expires});
             dispatch(setLogin())
             dispatch(goToHome(navigate))
-            
+            //이메일을 데이터베이스에서검색해서 값이있으면 로그인가능 없으면 회원가입창으로 이동
         }).catch(e=>console.log(e))
     },[])
     return (

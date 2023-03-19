@@ -105,17 +105,7 @@ const LoginStyle = styled.div`
     }
 `
 
-const Login = () => {
-    // useEffect(()=>{
-    //     const script = document.createElement('script')
-    //     script.src = 'https://developers.kakao.com/sdk/js/kakao.js'
-    //     script.async = true;
-    //     document.body.appendChild(script);
-    //     const script2 = document.createElement('script')
-    //     script2.innerText = "KaKao.init('aaf997d1f0851fa35488f191878d7a4c')"
-    //     document.body.appendChild(script2)
-    // },[])
-    
+const Login = () => {    
     const dispatch = useDispatch();
     const navigate = useNavigate();
 
