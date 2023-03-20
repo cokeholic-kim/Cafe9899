@@ -19,6 +19,7 @@ import MenuUpadate from './page/MenuUpadate';
 import { Menu } from 'antd';
 import MenuDetail from './page/MenuDetail';
 import KakaoLogin from './loginmodule/KakaoLogin';
+import NaverLogin from './loginmodule/NaverLogin';
 
 function App() {
   return (
@@ -38,6 +39,7 @@ function App() {
           <Route path='/menuDetail/:m_number' element={<><Header/><MenuDetail/><Footer/></>}/>
           <Route path='/Login' element={<Login/>}/>
           <Route path='/KAKAOLOGIN' element={<KakaoLogin/>}/>
+          <Route path='/NAVERLOGIN' element={<NaverLogin/>}/>
           <Route path='/Join' element={<Join/>}/>
           <Route path='/findPass' element={<FindPass/>}/>
           <Route path='/updatePass:m_number' element={<UpdatePass/>}/>

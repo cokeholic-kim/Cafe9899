@@ -1,3 +1,4 @@
+import { Space, Spin } from 'antd';
 import axios from 'axios';
 import React, { useEffect } from 'react';
 import { useDispatch } from 'react-redux';
@@ -37,8 +38,13 @@ const KakaoLogin = () => {
         }).catch(e=>console.log(e))
     },[])
     return (
-        <div>
-            하이
+        <div style={{lineHeight:'100vh'}}>
+            <Space direction='vertical' style={{width:'100%',lineHeight:'100vh'}}>
+                <Spin tip="Loading" size="large">
+                    <div className="content" />
+                </Spin>
+            </Space>
+
         </div>
     );
 };

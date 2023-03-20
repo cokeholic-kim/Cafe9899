@@ -1,9 +1,9 @@
 import axios from 'axios';
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { Link, useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
-import { API_URL, KAKAO_AUTH_URL } from '../config/apiurl';
+import { API_URL, KAKAO_AUTH_URL, NAVER_CLIENT_ID, NAVER_REDIRECT } from '../config/apiurl';
 import { goToHome, setLogin } from '../modules/logincheck';
 import { setCookie } from '../util/cookie';
 
@@ -148,7 +148,24 @@ const Login = () => {
             })
         }
     }
-    return (
+      useEffect(() => {
+        const {naver} = window 
+        const naverLogin = new naver.LoginWithNaverId({
+            clientId:NAVER_CLIENT_ID,
+            callbackUrl:NAVER_REDIRECT,
+            isPopup:false,
+            loginButton: {
+              color: "green",
+              type: 1,
+              height: 38,
+            },
+          });
+          console.log(naverLogin)
+        naverLogin.init();
+      }, []);    
+
+
+      return (
         <LoginStyle className='center'>
             <div className='login-container'>
                 <div className='login-title'>
@@ -189,15 +206,15 @@ const Login = () => {
                             </a>
                         </div>
                         <div className="socialBtn">
-                            <div className="socialBtn-image-container" onClick={(e)=>{console.log(e)}}>
+                            <div id='naverIdLogin'>
                                 <img src="imgs/naver_btn.png" alt="logo"/>
                             </div>
                         </div>
-                        <div className="socialBtn google-mobile-login">
-                            <div className="socialBtn-image-container" onClick={(e)=>{console.log(e)}}>
+                        {/* <div className="socialBtn google-mobile-login">
+                            <div id='google-signin-btn' onClick={signIn}>
                                 <img src="/imgs/google_btn.png" alt="logo"/>
                             </div>
-                        </div>
+                        </div> */}
                     </div>
                 </div>
             </div>
